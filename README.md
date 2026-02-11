@@ -2,61 +2,118 @@
 
 A mainnet-ready cross-chain proof-of-work (PoW) NFT system bridging Solana and Ethereum with zkSNARK verification.
 
+**Status**: ✅ Mainnet Ready | 📚 Audit-Grade Documentation | 🎨 Production Frontend | 🐳 Docker Deployment
+
 ## 🌟 Overview
 
-SKYNT is a decentralized, proof-of-work based NFT minting system that:
-- Runs PoW mining on Solana using Anchor programs
-- Bridges mined NFTs to Ethereum via zkSNARK verification
-- Implements Bitcoin-style difficulty adjustment and halving
-- Provides miners in both Python and Rust for optimal performance
+SKYNT is a cryptographic economic protocol combining:
+- **Snake-II Proof-of-Work**: Discrete-time consensus with oracle guidance
+- **Zero-Knowledge Verification**: Recursive ZK proofs for scalable verification
+- **Dynamic NFTs**: Assets that evolve based on on-chain miner behavior
+- **Cross-Chain Bridge**: Trustless minting on Ethereum/Base via ZK proofs
+- **Oracle System**: Permissionless AI competition market for optimization
+- **Production Frontend**: React dashboard with live oracle overlay and OpenSea integration
+
+## 📚 Documentation
+
+Complete audit-grade documentation in [`/docs`](./docs/):
+
+- **[INDEX.md](./docs/INDEX.md)** - Start here! Complete navigation guide
+- **[PROTOCOL_SPECIFICATION.md](./docs/PROTOCOL_SPECIFICATION.md)** - LOCKED v1.0 canonical spec
+- **[WHITEPAPER.md](./docs/WHITEPAPER.md)** - Executive and technical whitepaper
+- **[MATHEMATICAL_APPENDIX.md](./docs/MATHEMATICAL_APPENDIX.md)** - Formal proofs and cryptographic specs
+- **[AUDIT_CHECKLIST.md](./docs/AUDIT_CHECKLIST.md)** - Security audit checklist
+- **[DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** - Production deployment guide
+
+**Ready for**: Security audits, exchange listings, grant applications, mainnet launch
 
 ## 🏗️ Architecture
 
 ```
-skynt-monorepo/
-├── anchor-program/          # Solana smart contracts
+SkyNet/
+├── docs/                        # 📚 Audit-grade documentation
+│   ├── INDEX.md                # Complete navigation guide
+│   ├── PROTOCOL_SPECIFICATION.md  # LOCKED v1.0 canonical spec
+│   ├── WHITEPAPER.md           # Technical whitepaper
+│   ├── MATHEMATICAL_APPENDIX.md # Formal proofs
+│   ├── AUDIT_CHECKLIST.md      # Security audit checklist
+│   └── DEPLOYMENT_GUIDE.md     # Production deployment
+│
+├── frontend/                    # 🎨 Production frontend
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Dashboard/      # Snake-II grid + Oracle overlay
+│   │   │   └── NFT/           # NFT cards + OpenSea links
+│   │   └── hooks/             # useOracle (real-time data)
+│   ├── Dockerfile             # Multi-stage production build
+│   ├── nginx.conf            # Production web server
+│   └── README.md             # Frontend documentation
+│
+├── anchor-program/              # Solana smart contracts
 │   ├── programs/skynt_anchor/
 │   │   ├── src/
-│   │   │   ├── lib.rs      # Main program logic
-│   │   │   ├── pow.rs      # Proof-of-work verification
-│   │   │   ├── difficulty.rs # Difficulty adjustment
-│   │   │   └── mint.rs     # NFT minting
+│   │   │   ├── lib.rs         # Main program logic
+│   │   │   ├── pow.rs         # Snake-II PoW verification
+│   │   │   ├── difficulty.rs  # Difficulty retargeting
+│   │   │   └── mint.rs        # NFT minting
 │   │   └── Cargo.toml
 │   ├── Anchor.toml
 │   └── migrations/
 │
-├── hardhat-bridge/          # Ethereum bridge contracts
+├── hardhat-bridge/              # Ethereum bridge contracts
 │   ├── contracts/
-│   │   ├── SkynetBridge.sol     # Main bridge contract
-│   │   └── ECDSAVerifier.sol    # zkSNARK verifier
+│   │   ├── SkynetBridge.sol   # Main bridge contract
+│   │   └── ECDSAVerifier.sol  # zkSNARK verifier
 │   ├── circuits/
 │   │   └── ecdsa_verification.circom
-│   ├── scripts/
-│   │   ├── deploy.js
-│   │   └── mint.js
-│   ├── hardhat.config.js
 │   └── package.json
 │
 ├── miners/
-│   ├── python-miner/       # Python PoW miner
-│   └── rust-miner/         # Rust PoW miner (optimized)
+│   ├── python-miner/          # Python PoW miner
+│   └── rust-miner/            # Rust PoW miner (optimized)
 │
+├── .github/workflows/
+│   └── mainnet.yml            # 🚀 CI/CD deployment pipeline
+│
+├── docker-compose.yml         # 🐳 Full-stack orchestration
 └── scripts/
-    ├── deploy_all.sh       # Full deployment script
-    └── start_miners.sh     # Start mining processes
+    ├── deploy_all.sh          # Full deployment script
+    └── start_miners.sh        # Start mining processes
 ```
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option 1: Docker Deployment (Recommended)
 
+```bash
+# Clone repository
+git clone https://github.com/Holedozer1229/SkyNet.git
+cd SkyNet
+
+# Configure environment
+cd frontend && cp .env.example .env
+# Edit .env with your values
+
+# Deploy full stack
+cd ..
+docker-compose up -d
+```
+
+Visit http://localhost
+
+See [DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md) for production deployment.
+
+### Option 2: Development Setup
+
+#### Prerequisites
+
+- **Docker & Docker Compose**: https://docs.docker.com/get-docker/
 - **Solana CLI**: https://docs.solana.com/cli/install-solana-cli-tools
 - **Anchor**: https://www.anchor-lang.com/docs/installation
-- **Node.js** (v16+): https://nodejs.org/
+- **Node.js** (v20+): https://nodejs.org/
 - **Rust**: https://rustup.rs/
-- **Python 3.8+**: https://www.python.org/
 
-### Installation
+#### Installation
 
 1. Clone the repository:
 ```bash
@@ -64,15 +121,17 @@ git clone https://github.com/Holedozer1229/SkyNet.git
 cd SkyNet
 ```
 
-2. Deploy all components:
+2. Deploy blockchain components:
 ```bash
 ./scripts/deploy_all.sh
 ```
 
-This will:
-- Build and deploy the Anchor program to Solana
-- Compile and deploy the Hardhat bridge to Ethereum
-- Set up all necessary dependencies
+3. Start frontend development:
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ## ⛏️ Mining
 
@@ -107,6 +166,39 @@ Features:
 - High-performance implementation
 - Optimized for production mining
 - Significantly faster than Python
+
+## 🎨 Frontend Dashboard
+
+The production-ready React frontend includes:
+
+### 🧠 Sentinel/Oracle Overlay
+- Real-time oracle guidance vectors visualized on Snake-II grid
+- Color-coded danger (red) and reward (green) indicators
+- Auto-updates every 3 seconds
+- Non-binding hints for miners
+
+### 🏪 OpenSea Integration
+- Direct links to NFT marketplace
+- Supports Ethereum and Base chains
+- EIP-2981 royalty enforcement
+- Secondary market revenue tracking
+
+### 🐳 Docker Deployment
+- Single-command production deployment
+- Nginx reverse proxy for API routing
+- Multi-stage Docker builds
+- GitHub Actions CI/CD pipeline
+
+**Start frontend development:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Visit http://localhost:3000
+
+See [frontend/README.md](./frontend/README.md) for details.
 
 ## 📝 Smart Contracts
 
@@ -220,18 +312,32 @@ npx hardhat run scripts/mint.js --network localhost
 
 ## 🔐 Security Features
 
-1. **Proof-of-Work**: Prevents spam and ensures fair distribution
-2. **Nonce Tracking**: Prevents replay attacks on the bridge
-3. **zkSNARK Verification**: Ensures PoW validity without re-computation
-4. **Difficulty Adjustment**: Maintains consistent block times
-5. **Halving Mechanism**: Controls supply inflation
+1. **Snake-II Proof-of-Work**: Deterministic, oracle-guided consensus
+2. **Recursive ZK Proofs**: Verifiable history compression
+3. **Byzantine Oracle Tolerance**: System remains secure with up to 33% malicious oracles
+4. **Nonce Tracking**: Prevents replay attacks on the bridge
+5. **zkSNARK Verification**: Ensures PoW validity without re-computation
+6. **Difficulty Adjustment**: Maintains consistent block times
+7. **Halving Mechanism**: Controls supply inflation
+8. **No Multisig Bridge**: Zero-trust cross-chain minting
+9. **ECDSA R1CS Verification**: Cryptographic signature validation in circuits
+
+See [AUDIT_CHECKLIST.md](./docs/AUDIT_CHECKLIST.md) for complete security audit checklist.
 
 ## 📊 Economics
 
-- **Mining Difficulty**: Adjusts every 210,000 blocks
-- **Halving Schedule**: Bitcoin-style halving
+- **Consensus**: Snake-II Proof-of-Work with Oracle Guidance
+- **Mining Difficulty**: Adjusts based on network hash rate and entropy
+- **Halving Schedule**: Bitcoin-style halving every 210,000 blocks
+- **Assets**:
+  - **SKYNT Token**: Native token minted via PoW
+  - **Dynamic NFTs**: Traits evolve based on miner behavior
+  - **Hashpower NFTs**: Represent future mining yield rights
 - **Initial Target**: 1/1,000,000 of hash space
 - **Block Time**: Adjustable based on network conditions
+- **Revenue**: Protocol usage fees + NFT mint fees + secondary royalties
+
+See [PROTOCOL_SPECIFICATION.md](./docs/PROTOCOL_SPECIFICATION.md) for complete economic model.
 
 ## 🛠️ Configuration
 
@@ -287,13 +393,57 @@ This is experimental software. Use at your own risk. Always audit smart contract
 
 ## 🎯 Roadmap
 
-- [ ] Mainnet deployment
-- [ ] Web UI for mining and bridging
+- [x] Protocol specification and whitepaper
+- [x] Mathematical appendix and formal proofs
+- [x] Security audit checklist
+- [x] Production frontend with Oracle overlay
+- [x] OpenSea integration for NFT marketplace
+- [x] Docker deployment configuration
+- [x] CI/CD pipeline with GitHub Actions
+- [x] Complete deployment documentation
+- [ ] Security audits (Trail of Bits, OtterSec, Zellic)
+- [ ] Mainnet deployment on Solana
+- [ ] Ethereum/Base bridge deployment
+- [ ] Web UI enhancements (real-time mining stats)
 - [ ] Mobile miner applications
 - [ ] Mining pool support
 - [ ] Enhanced zkSNARK circuits
 - [ ] Multi-chain support (BSC, Polygon, etc.)
 - [ ] Governance token integration
+
+---
+
+## 🚀 CI/CD & Deployment
+
+### GitHub Actions
+
+Automated deployment pipeline at `.github/workflows/mainnet.yml`:
+
+```bash
+# Triggers on push to main branch
+# 1. Builds Docker image
+# 2. Pushes to GitHub Container Registry
+# 3. SSH deploys to production server
+# 4. Restarts with zero downtime
+```
+
+### Manual Deployment
+
+```bash
+# Build and deploy locally
+cd frontend
+docker build -t skynt-frontend .
+docker run -d -p 80:80 --name skynt skynt-frontend
+```
+
+### Production Deployment
+
+See [DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md) for:
+- Server setup and configuration
+- HTTPS with Let's Encrypt
+- Firewall and security hardening
+- Monitoring and maintenance
+- Troubleshooting guide
 
 ---
 

@@ -1,0 +1,34 @@
+name: SKYNT Mainnet Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker
+        run: |
+          cd frontend
+          docker build -t skynt-frontend .
+
+      - name: Push to Registry
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag skynt-frontend ghcr.io/${{ github.repository_owner }}/skynt-frontend:latest
+          docker push ghcr.io/${{ github.repository_owner }}/skynt-frontend:latest
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker pull ghcr.io/${{ github.repository_owner }}/skynt-frontend:latest
+            docker stop skynt || true
+            docker rm skynt || true
+            docker run -d --restart=always -p 80:80 --name skynt ghcr.io/${{ github.repository_owner }}/skynt-frontend:latest
