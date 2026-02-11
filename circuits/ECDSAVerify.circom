@@ -11,13 +11,8 @@ template ECDSAVerify() {
     // R_x ≡ u1*G_x + u2*PubKey_x
     // r' ≡ R_x mod n
     
-    // Verify that R_x matches r (signature validation)
-    // In a complete ECDSA verification, R_x should equal r when reduced modulo n
-    signal diff;
-    diff <== R_x - r;
-    
-    // Constraint: R_x must equal r
-    diff === 0;
+    // Constraint: Verify that R_x matches r
+    R_x === r;
 }
 
 component main {public [R_x, r]} = ECDSAVerify();
