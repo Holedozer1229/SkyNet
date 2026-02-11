@@ -267,9 +267,16 @@ Contributions are welcome! Please:
 
 MIT License - see LICENSE file for details
 
+## 📚 Documentation
+
+Comprehensive technical documentation is available:
+
+- **[Whitepaper](docs/whitepaper.md)**: Complete technical specification and design rationale
+- **[Audit Checklist](docs/audit-checklist.md)**: Mainnet readiness checklist for auditors
+- **[Mathematical Appendix](docs/mathematical-appendix.md)**: Formal mathematical foundations
+
 ## 🔗 Links
 
-- **Documentation**: [Coming Soon]
 - **Discord**: [Coming Soon]
 - **Twitter**: [Coming Soon]
 
