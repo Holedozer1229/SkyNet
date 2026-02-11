@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 
 pub fn recursive_pow(nonce: u64, miner: &Pubkey) -> [u8; 32] {
     let mut hash = [0u8; 32];
-    for _i in 0..10 {
+    for _ in 0..10 {
         let mut hasher = Sha256::new();
         hasher.update(&hash);
         hasher.update(&nonce.to_le_bytes());
