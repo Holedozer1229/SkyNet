@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - VITE_OPENSEA_COLLECTION=${OPENSEA_COLLECTION}
+      - VITE_EVM_CHAIN=${EVM_CHAIN:-ethereum}
+    networks:
+      - skynt-network
+    restart: unless-stopped
+
+  miners:
+    build:
+      context: ./miners/rust-miner
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    networks:
+      - skynt-network
+    restart: unless-stopped
+
+networks:
+  skynt-network:
+    driver: bridge
