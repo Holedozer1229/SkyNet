@@ -13,7 +13,7 @@ pub fn recursive_pow(nonce: u64, miner: &Pubkey) -> [u8; 32] {
     hash
 }
 
-pub fn verify_pow(pow_hash: &[u8; 32], difficulty: &crate::difficulty::Difficulty) -> bool {
+pub fn verify_pow(pow_hash: &[u8; 32], difficulty: &crate::Difficulty) -> bool {
     let target = difficulty.current_target();
     let hash_num = u128::from_be_bytes(pow_hash[0..16].try_into().unwrap());
     hash_num < target

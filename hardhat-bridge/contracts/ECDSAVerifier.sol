@@ -2,8 +2,9 @@
 pragma solidity ^0.8.20;
 
 contract ECDSAVerifier {
-    // Simplified ECDSA verification contract
-    // In production, this would integrate with zkSNARK proof verification
+    // ⚠️ SECURITY NOTICE: This is a simplified placeholder implementation
+    // Before mainnet deployment, this MUST be replaced with actual zkSNARK proof verification
+    // using the compiled Circom circuits and Groth16/Plonk verifier contracts
     
     struct Proof {
         uint256 r;
@@ -12,13 +13,15 @@ contract ECDSAVerifier {
     }
     
     function verify(bytes memory proof, uint256 nonce) external pure returns (bool) {
-        // Simplified verification logic
-        // In production, this would verify zkSNARK proofs from Circom circuits
+        // TODO: Implement actual zkSNARK proof verification
+        // This should verify:
+        // 1. The proof is a valid zkSNARK proof for the Circom circuit
+        // 2. The public inputs match the claimed nonce
+        // 3. The proof verifies the PoW was computed correctly
         require(proof.length > 0, "Invalid proof");
         require(nonce > 0, "Invalid nonce");
         
-        // Placeholder - always returns true for demonstration
-        // Real implementation would verify ECDSA signature and zkSNARK proof
+        // ⚠️ PLACEHOLDER: Replace with actual verification before production
         return true;
     }
     
@@ -28,8 +31,11 @@ contract ECDSAVerifier {
         uint256[2] memory c,
         uint256[2] memory input
     ) public pure returns (bool) {
-        // zkSNARK proof verification would go here
-        // This would verify the Circom circuit proof
+        // TODO: Implement Groth16/Plonk proof verification
+        // This would verify the zkSNARK proof from the compiled Circom circuit
+        // Generate this function using snarkjs: snarkjs generateverifier
+        
+        // ⚠️ PLACEHOLDER: Replace with actual verification before production
         return true;
     }
 }
