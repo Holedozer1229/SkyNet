@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Hardhat Node (for local development)
+  hardhat-node:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: npm run node
+    ports:
+      - "8545:8545"
+    networks:
+      - starlord2-network
+
+  # Backend API
+  backend:
+    image: node:20-alpine
+    working_dir: /app/backend
+    volumes:
+      - ./backend:/app/backend
+      - ./deployed_admin.json:/app/deployed_admin.json
+      - ./node_modules:/app/node_modules
+    command: npm start
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - RPC_URL=http://hardhat-node:8545
+    depends_on:
+      - hardhat-node
+    networks:
+      - starlord2-network
+
+  # Frontend
+  frontend:
+    image: node:20-alpine
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - ./frontend/node_modules:/app/frontend/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    depends_on:
+      - backend
+    networks:
+      - starlord2-network
+
+networks:
+  starlord2-network:
+    driver: bridge
