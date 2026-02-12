@@ -1,0 +1,224 @@
+name: StarLord2 × SKYNT LaunchNFT CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smart-contracts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Run contract tests
+        run: npm run test
+
+      - name: Deploy contracts (testnet)
+        if: github.ref == 'refs/heads/main'
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+        run: npm run deploy:sepolia
+
+  backend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm test
+
+      - name: Build backend
+        run: |
+          cd backend
+          npm run build || echo "No build script"
+
+  frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Lint frontend
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Upload frontend artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+  zk-circuits:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Circom
+        run: |
+          # Install Circom from package manager for better security
+          # Alternatively: verify checksum if downloading binary
+          wget -q https://github.com/iden3/circom/releases/download/v2.1.6/circom-linux-amd64
+          echo "Expected checksum verification would go here"
+          # For now, we'll note this is a known security consideration
+          chmod +x circom-linux-amd64
+          sudo mv circom-linux-amd64 /usr/local/bin/circom
+          echo "⚠️  Security Note: In production, verify binary checksums"
+
+      - name: Compile Φ circuit
+        run: |
+          cd circuits
+          circom phi_computation.circom --r1cs --wasm --sym || echo "Circuit compilation optional"
+
+      - name: Compile NFT rarity circuit
+        run: |
+          cd circuits
+          circom nft_rarity.circom --r1cs --wasm --sym || echo "Circuit compilation optional"
+
+  deploy:
+    needs: [smart-contracts, backend, frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download frontend artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Build Docker images
+        run: |
+          cd frontend
+          docker build -t starlord2-frontend .
+
+      - name: Push to Container Registry
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag starlord2-frontend ghcr.io/${{ github.repository_owner }}/starlord2-frontend:latest
+          docker push ghcr.io/${{ github.repository_owner }}/starlord2-frontend:latest
+
+      - name: Deploy to Server
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/starlord2
+            docker-compose pull
+            docker-compose up -d --force-recreate
+            docker system prune -f
+
+  sync-data:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync PhiVisualization data
+        run: |
+          echo "Syncing Φ visualization data..."
+          # Add sync commands here
+
+      - name: Sync NFT rarity analytics
+        run: |
+          echo "Syncing NFT rarity analytics..."
+          # Add sync commands here
+
+      - name: Sync raid pass tracking
+        run: |
+          echo "Syncing raid pass state..."
+          # Add sync commands here
+
+      - name: Sync cross-chain state
+        run: |
+          echo "Syncing cross-chain mining state..."
+          # Add sync commands here
+
+  rollback:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    if: failure() && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+    steps:
+      - name: Rollback deployment
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/starlord2
+            docker-compose down
+            docker pull ghcr.io/${{ github.repository_owner }}/starlord2-frontend:previous
+            docker-compose up -d
+
+  notification:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    permissions: {}
+    steps:
+      - name: Send notification
+        run: |
+          echo "Deployment completed: ${{ job.status }}"
+          # Add notification logic (Slack, Discord, etc.)

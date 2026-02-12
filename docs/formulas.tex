@@ -1,0 +1,214 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{StarLord2 × SKYNT LaunchNFT Ecosystem\\Mathematical Formulas}
+\author{StarLord2 Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+This document contains all symbolic and algebraic formulas used in the StarLord2 × SKYNT LaunchNFT ecosystem.
+
+\section{Φ (Phi) Computation}
+
+\subsection{Total Φ Value}
+
+The total Φ value is computed as the weighted average of individual φ parameters:
+
+\begin{equation}
+\Phi_{\text{total}} = \frac{\sum_{i=1}^{N} w_i \cdot \varphi_i}{N}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $w_i$ is the weight of parameter $i$
+    \item $\varphi_i$ is the value of parameter $i$
+    \item $N$ is the total number of parameters
+\end{itemize}
+
+\subsection{Delta-S Total}
+
+The total shift in the system is computed as:
+
+\begin{equation}
+\Delta S_{\text{total}} = \Delta S_{\text{geom}} + \Delta S_{\text{protocol}}
+\end{equation}
+
+where:
+
+\begin{equation}
+\Delta S_{\text{geom}} = \sum_{i=1}^{N} \sqrt{w_i \cdot \varphi_i}
+\end{equation}
+
+\begin{equation}
+\Delta S_{\text{protocol}} = \frac{1}{N}\sum_{i=1}^{N} e_i
+\end{equation}
+
+and $e_i$ represents the eigenvector component for parameter $i$.
+
+\section{M-Shift Optimization}
+
+\subsection{Eigenvector Particle Flow}
+
+The particle positions in 3D space are computed using the M-shift optimization with eigenvector influence:
+
+\begin{align}
+x &= \left[ (\text{rand} - 0.5) \cdot 200 + \text{val} \cdot 2 \right] \cdot e_i \\
+y &= \left[ (\text{rand} - 0.5) \cdot 200 + \text{val} \cdot 1.5 \right] \cdot e_i \\
+z &= \left[ (\text{rand} - 0.5) \cdot 200 + \text{val} \cdot 3 \right] \cdot e_i
+\end{align}
+
+where:
+\begin{itemize}
+    \item $\text{rand} \in [0, 1]$ is a uniform random variable
+    \item $\text{val}$ is the normalized parameter value
+    \item $e_i$ is the eigenvector for parameter $i$
+\end{itemize}
+
+\section{NFT Rarity System}
+
+\subsection{Rarity Score}
+
+The rarity score for NFT $i$ is computed as:
+
+\begin{equation}
+R_i = f(\text{supply}, \text{demand}, \Phi_i) = \frac{\text{demand} \cdot \Phi_i}{\text{supply} + 1}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\text{demand}$ is the market demand at mint time
+    \item $\Phi_i$ is the Φ value when the NFT was minted
+    \item $\text{supply}$ is the total NFT supply at mint time
+\end{itemize}
+
+\subsection{Rarity Tiers}
+
+NFTs are classified into rarity tiers based on their score $R_i$:
+
+\begin{equation}
+\text{Tier}(R_i) = 
+\begin{cases}
+\text{Legendary} & \text{if } R_i \geq 99 \\
+\text{Epic} & \text{if } 90 \leq R_i < 99 \\
+\text{Rare} & \text{if } 75 \leq R_i < 90 \\
+\text{Uncommon} & \text{if } 50 \leq R_i < 75 \\
+\text{Common} & \text{if } R_i < 50
+\end{cases}
+\end{equation}
+
+\section{Staking Rewards}
+
+\subsection{Reward Calculation}
+
+The staking rewards for a user are computed as:
+
+\begin{equation}
+\text{rewards} = \frac{\text{amount} \cdot r \cdot t}{10000 \cdot 365 \text{ days}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\text{amount}$ is the staked amount
+    \item $r$ is the reward rate in basis points
+    \item $t$ is the time staked in seconds
+\end{itemize}
+
+\section{Omega Infinite Yield}
+
+\subsection{Omega Multiplier}
+
+The Omega Infinite multiplier increases yield over time:
+
+\begin{equation}
+\Omega(t) = 1 + \frac{t_{\text{days}}}{365} \cdot 0.5
+\end{equation}
+
+where $t_{\text{days}}$ is the number of days staked.
+
+\subsection{Total Yield}
+
+The total yield with Omega multiplier is:
+
+\begin{equation}
+Y_{\text{total}} = (Y_{\text{staking}} + Y_{\text{attack}} + Y_{\text{NFT}}) \cdot \Omega(t)
+\end{equation}
+
+\section{Attack System}
+
+\subsection{Attack Damage}
+
+The damage dealt by an attack is:
+
+\begin{equation}
+D = \frac{D_{\text{base}} \cdot \Phi_{\text{current}}}{1000}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $D_{\text{base}}$ is the base damage for the attack tier
+    \item $\Phi_{\text{current}}$ is the current Φ value
+\end{itemize}
+
+\subsection{Energy Regeneration}
+
+Energy regenerates linearly over time:
+
+\begin{equation}
+E(t) = \min\left(E_0 + \frac{t \cdot r_E}{1 \text{ hour}}, E_{\max}\right)
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $E_0$ is the initial energy
+    \item $r_E$ is the regeneration rate (energy per hour)
+    \item $E_{\max}$ is the maximum energy capacity
+    \item $t$ is time elapsed in hours
+\end{itemize}
+
+\section{Raid Pass System}
+
+\subsection{Staking Weight Multiplier}
+
+Raid passes provide staking weight multipliers:
+
+\begin{equation}
+w_{\text{effective}} = w_{\text{base}} \cdot m_{\text{tier}}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $w_{\text{base}}$ is the base staking weight
+    \item $m_{\text{tier}} \in \{1.0, 1.5, 2.0\}$ is the tier multiplier
+\end{itemize}
+
+\section{Cross-Chain Mining}
+
+\subsection{Hashrate Distribution}
+
+The hashrate share for chain $c$ is:
+
+\begin{equation}
+h_c = \frac{H_c}{\sum_{i=1}^{C} H_i}
+\end{equation}
+
+where $H_c$ is the hashrate for chain $c$ and $C$ is the total number of chains.
+
+\subsection{Mining Efficiency}
+
+The efficiency metric for a chain is:
+
+\begin{equation}
+\eta_c = \frac{H_c / M_c}{H_{\text{total}} / M_{\text{total}}}
+\end{equation}
+
+where $M_c$ is the number of miners on chain $c$.
+
+\end{document}
