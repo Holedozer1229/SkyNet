@@ -5,7 +5,7 @@ import { YieldDashboard } from './components/LaunchNFT/YieldDashboard';
 import { RaidPass } from './components/LaunchNFT/RaidPass';
 import { CrossChain } from './components/LaunchNFT/CrossChain';
 import { NFTRarityDashboard } from './components/LaunchNFT/NFTRarityDashboard';
-import './App.css';
+import './AppLaunchNFT.css';
 
 function App() {
   const { account, connected, connectWallet, disconnectWallet } = useContract();

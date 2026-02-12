@@ -77,9 +77,9 @@ contract Admin is Ownable, ReentrancyGuard {
         
         phiParameterCount = 3;
         
-        // Initialize staking config
+        // Initialize staking config with more reasonable values
         stakingConfig = StakingConfig({
-            minStake: 100 ether,
+            minStake: 1 ether, // 1 ETH minimum stake (adjustable)
             maxStake: 10000 ether,
             rewardRate: 500, // 5% in basis points
             lockPeriod: 30 days

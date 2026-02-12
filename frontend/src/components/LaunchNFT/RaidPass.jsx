@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useContract } from '../hooks/useContract';
+import { useContract } from '../../hooks/useContract';
 
 const SEASONS = ['Spring', 'Summer', 'Fall', 'Winter'];
 const API_BASE_URL = 'http://localhost:3001/api';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useContract } from '../hooks/useContract';
+import { useContract } from '../../hooks/useContract';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 

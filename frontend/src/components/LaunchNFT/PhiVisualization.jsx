@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useContract } from '../hooks/useContract';
+import { useContract } from '../../hooks/useContract';
 
 /**
  * PhiVisualization Component
