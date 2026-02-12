@@ -21,12 +21,12 @@ jobs:
           docker tag skynt-frontend ghcr.io/${{ github.repository_owner }}/skynt-frontend:latest
           docker push ghcr.io/${{ github.repository_owner }}/skynt-frontend:latest
 
-      - name: Deploy
-        uses: appleboy/ssh-action@v1
+      - name: Deploy to DigitalOcean
+        uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
           script: |
             docker pull ghcr.io/${{ github.repository_owner }}/skynt-frontend:latest
             docker stop skynt || true
