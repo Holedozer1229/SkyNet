@@ -1,0 +1,27 @@
+{
+  "name": "starlord2-skynt-ecosystem",
+  "version": "1.0.0",
+  "description": "StarLord2 × SKYNT LaunchNFT Ecosystem - Smart Contracts",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js",
+    "deploy:localhost": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "node": "hardhat node"
+  },
+  "keywords": ["starlord2", "skynt", "nft", "defi", "ethereum"],
+  "author": "StarLord2 Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0",
+    "chai": "^4.3.10"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0"
+  }
+}
